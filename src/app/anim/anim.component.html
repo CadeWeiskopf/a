@@ -1,0 +1,41 @@
+<div>
+  <button (click)="prevFrame.set(frame()); frame.set(frame() - 1)">
+    Frame-
+  </button>
+  <button (click)="prevFrame.set(frame()); frame.set(frame() + 1)">
+    Frame+
+  </button>
+  <span>at {{ frame() }} from {{ prevFrame() }}</span>
+</div>
+
+<div
+  [@frame1]="getFrameTransition(1)"
+  id="words"
+  style="
+    position: fixed;
+    top: 50%;
+    right: 0px;
+    display: flex;
+    background-color: red;
+  "
+>
+  <div id="cade" style="flex-grow: 1">
+    <span>cade</span>
+  </div>
+  <div id="w">
+    <span>w</span>
+  </div>
+  <div id="dot">
+    <span>.</span>
+  </div>
+  <div id="dev">
+    <span>dev</span>
+  </div>
+</div>
+
+<!-- <nav>
+  <button type="button" (click)="toggle()">Toggle Open/Close</button>
+</nav>
+<div [@openClose]="isOpen ? 'open' : 'closed'" class="open-close-container">
+  <p>The box is now {{ isOpen ? "Open" : "Closed" }}!</p>
+</div> -->
