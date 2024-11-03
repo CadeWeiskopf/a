@@ -1,46 +1,51 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { trigger } from '@angular/animations';
 import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-  query,
-} from '@angular/animations';
+  cadeFrames,
+  cadeSpanFrames,
+  generateAnimateCalls,
+  lCadeFrames,
+  wFrames,
+  wordsFrames,
+} from './anim.model';
+import { CanvasComponent } from './canvas/canvas.component';
 
 @Component({
   selector: 'app-anim',
   standalone: true,
-  imports: [],
+  imports: [CanvasComponent],
   templateUrl: './anim.component.html',
   styleUrl: './anim.component.scss',
   animations: [
-    trigger('frame1', [
-      state('start', style({})),
-      state('end', style({ width: 'calc(50%)' })),
-      transition('start => end', [animate('1s')]),
-      transition('end => start', [animate('1s')]),
+    trigger('words', [
+      ...wordsFrames,
+      ...generateAnimateCalls(wordsFrames.length),
+    ]),
+    trigger('cade', [
+      ...cadeFrames,
+      ...generateAnimateCalls(wordsFrames.length),
+    ]),
+    trigger('cadeSpan', [
+      ...cadeSpanFrames,
+      ...generateAnimateCalls(cadeSpanFrames.length),
+    ]),
+    trigger('w', [...wFrames, ...generateAnimateCalls(wFrames.length)]),
+    trigger('lCade', [
+      ...lCadeFrames,
+      ...generateAnimateCalls(lCadeFrames.length),
     ]),
   ],
 })
 export class AnimComponent {
-  prevFrame = signal(0);
-  frame = signal(0);
+  protected readonly prevFrame = signal(0);
+  protected readonly frame = signal(0);
+  protected readonly wordsFrames = wordsFrames;
+  protected readonly cadeFrames = cadeFrames;
+  protected readonly cadeSpanFrames = cadeSpanFrames;
+  protected readonly wFrames = wFrames;
+  protected readonly lCadeFrames = lCadeFrames;
 
-  getFrameTransition(frame: number): 'start' | 'end' {
-    if (this.frame() === frame) {
-      if (this.prevFrame() > this.frame()) {
-        console.log('starrt');
-        return 'start';
-      } else {
-        console.log('end');
-        return 'end';
-      }
-    } else if (this.frame() > frame) {
-      return 'end';
-    } else {
-      console.log('!', this.frame(), this.prevFrame());
-      return 'start';
-    }
+  getFrameTransition(states: unknown[]): string {
+    return `frame${Math.min(this.frame(), states.length - 1)}`;
   }
 }

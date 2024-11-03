@@ -1,4 +1,4 @@
-<div>
+<div style="position: fixed; top: 0; left: 0">
   <button (click)="prevFrame.set(frame()); frame.set(frame() - 1)">
     Frame-
   </button>
@@ -8,28 +8,54 @@
   <span>at {{ frame() }} from {{ prevFrame() }}</span>
 </div>
 
-<div
-  [@frame1]="getFrameTransition(1)"
-  id="words"
-  style="
-    position: fixed;
-    top: 50%;
-    right: 0px;
-    display: flex;
-    background-color: red;
-  "
->
-  <div id="cade" style="flex-grow: 1">
-    <span>cade</span>
+<app-canvas />
+
+<div style="display: flex; height: 100%">
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      height: 100%;
+    "
+  >
+    <div [@lCade]="getFrameTransition(lCadeFrames)">
+      <span>Cade</span>
+    </div>
+    <div><span>Weiskopf</span></div>
   </div>
-  <div id="w">
-    <span>w</span>
-  </div>
-  <div id="dot">
-    <span>.</span>
-  </div>
-  <div id="dev">
-    <span>dev</span>
+
+  <div
+    style="
+      display: flex;
+      justify-content: flex-end;
+      width: 50%;
+      align-items: center;
+    "
+  >
+    <div
+      [@words]="getFrameTransition(wordsFrames)"
+      id="words"
+      style="display: flex; background-color: red"
+    >
+      <div [@cade]="getFrameTransition(cadeFrames)" style="flex-grow: 1">
+        <span
+          style="display: inline-block; overflow: hidden; white-space: nowrap"
+          [@cadeSpan]="getFrameTransition(cadeSpanFrames)"
+          >cade</span
+        >
+      </div>
+      <div [@w]="getFrameTransition(wFrames)">
+        <span>w</span>
+      </div>
+      <div>
+        <span>.</span>
+      </div>
+      <div>
+        <span>dev</span>
+      </div>
+    </div>
   </div>
 </div>
 
