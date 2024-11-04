@@ -1,11 +1,7 @@
 <div style="position: fixed; top: 0; left: 0">
-  <button (click)="prevFrame.set(frame()); frame.set(frame() - 1)">
-    Frame-
-  </button>
-  <button (click)="prevFrame.set(frame()); frame.set(frame() + 1)">
-    Frame+
-  </button>
-  <span>at {{ frame() }} from {{ prevFrame() }}</span>
+  <button (click)="frame.set(frame() - 1)">Frame-</button>
+  <button (click)="frame.set(frame() + 1)">Frame+</button>
+  <span>at frame{{ frame() }}</span>
 </div>
 
 <app-canvas />

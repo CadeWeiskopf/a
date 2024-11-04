@@ -42,7 +42,22 @@ import { CanvasComponent } from './canvas/canvas.component';
     trigger('dot', [...dotFrames, ...generateAnimateCalls(dotFrames.length)]),
     trigger('dotSpan', [
       ...dotSpanFrames,
-      ...generateAnimateCalls(dotSpanFrames.length),
+      ...generateAnimateCalls(dotSpanFrames.length, {
+        'frame5 => frame6': '500ms linear',
+        'frame6 => frame5': '500ms linear',
+        'frame6 => frame7': '500ms linear',
+        'frame7 => frame6': '500ms linear',
+        'frame7 => frame8': '500ms linear',
+        'frame8 => frame7': '500ms linear',
+        'frame8 => frame9': '500ms linear',
+        'frame9 => frame8': '500ms linear',
+        'frame9 => frame10': '500ms linear',
+        'frame10 => frame9': '500ms linear',
+        'frame10 => frame11': '500ms linear',
+        'frame11 => frame10': '500ms linear',
+        'frame11 => frame12': '500ms linear',
+        'frame12 => frame11': '500ms linear',
+      }),
     ]),
     trigger('lCade', [
       ...lCadeFrames,
@@ -52,7 +67,6 @@ import { CanvasComponent } from './canvas/canvas.component';
   ],
 })
 export class AnimComponent {
-  protected readonly prevFrame = signal(0);
   protected readonly frame = signal(0);
   protected readonly wordsFrames = wordsFrames;
   protected readonly cadeFrames = cadeFrames;

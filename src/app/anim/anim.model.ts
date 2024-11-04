@@ -67,14 +67,38 @@ export const dotSpanFrames = generateStates([
   style({}),
   style({}),
   style({}),
-  style({ width: 'calc((100% / 8) * 1)', transform: 'translateY(-50px)' }),
-  style({ width: 'calc((100% / 8) * 2)', transform: 'translateY(-50px)' }),
-  style({ width: 'calc((100% / 8) * 3)', transform: 'translateY(-50px)' }),
-  style({ width: 'calc((100% / 8) * 4)', transform: 'translateY(-50px)' }),
-  style({ width: 'calc((100% / 8) * 5)', transform: 'translateY(-50px)' }),
-  style({ width: 'calc((100% / 8) * 6)', transform: 'translateY(-50px)' }),
-  style({ width: 'calc((100% / 8) * 7)', transform: 'translateY(-50px)' }),
-  style({ width: 'calc((100% / 8) * 8)', transform: 'translateY(-50px)' }),
+  style({
+    width: 'calc((100% / 8) * 1)',
+    transform: 'translateY(calc(-100% * 2))',
+  }),
+  style({
+    width: 'calc((100% / 8) * 2)',
+    transform: 'translateY(calc(-100% * 4))',
+  }),
+  style({
+    width: 'calc((100% / 8) * 3)',
+    transform: 'translateY(calc(-100% * 6))',
+  }),
+  style({
+    width: 'calc((100% / 8) * 4)',
+    transform: 'translateY(calc(-100% * 8))',
+  }),
+  style({
+    width: 'calc((100% / 8) * 5)',
+    transform: 'translateY(calc(-100% * 6))',
+  }),
+  style({
+    width: 'calc((100% / 8) * 6)',
+    transform: 'translateY(calc(-100% * 4))',
+  }),
+  style({
+    width: 'calc((100% / 8) * 7)',
+    transform: 'translateY(calc(-100% * 2))',
+  }),
+  style({
+    width: 'calc((100% / 8) * 8)',
+    transform: 'translateY(calc(-100%))',
+  }),
 ]);
 
 export const dotTextPhases = [
@@ -98,15 +122,26 @@ function generateStates(styles: AnimationStyleMetadata[]) {
 }
 
 export const generateAnimateCalls = (
-  frameCount: number
+  frameCount: number,
+  uniqueAnimations?: {
+    [frameTransition: string]: string;
+  },
+  defaultAnimation = '500ms ease-in'
 ): AnimationTransitionMetadata[] => {
   const animates: AnimationTransitionMetadata[] = [];
   for (let i = 0; i < frameCount - 1; i++) {
+    const forwardTransitionKey = `frame${i} => frame${i + 1}`;
     animates.push(
-      transition(`frame${i} => frame${i + 1}`, [animate('500ms ease-in')])
+      transition(forwardTransitionKey, [
+        animate(uniqueAnimations?.[forwardTransitionKey] ?? defaultAnimation),
+      ])
     );
+
+    const reverseTransitionKey = `frame${i + 1} => frame${i}`;
     animates.push(
-      transition(`frame${i + 1} => frame${i}`, [animate('500ms ease-in')])
+      transition(reverseTransitionKey, [
+        animate(uniqueAnimations?.[reverseTransitionKey] ?? defaultAnimation),
+      ])
     );
   }
   return animates;
