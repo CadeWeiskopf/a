@@ -1,3 +1,38 @@
 :host {
   font-family: "Rubik Mono One";
 }
+
+.anim-wrapper {
+  display: flex;
+  height: 100%;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100%;
+}
+
+.left > .words:first-child {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
+  width: 50%;
+  align-items: center;
+}
+
+.right > .words:first-child {
+  display: flex;
+}
+
+.right span {
+  display: inline-block;
+  overflow: hidden;
+}

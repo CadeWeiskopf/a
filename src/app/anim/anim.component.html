@@ -10,47 +10,31 @@
 
 <app-canvas />
 
-<div style="display: flex; height: 100%">
-  <div
-    style="
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 50%;
-      height: 100%;
-    "
-  >
-    <div [@lCade]="getFrameTransition(lCadeFrames)">
-      <span>Cade</span>
+<div class="anim-wrapper">
+  <div class="left">
+    <div class="words">
+      <div [@lCade]="getFrameTransition(lCadeFrames)">
+        <span>Cade</span>
+      </div>
+      <div [@lW]="getFrameTransition(lWFrames)"><span>Weiskopf</span></div>
     </div>
-    <div><span>Weiskopf</span></div>
   </div>
 
-  <div
-    style="
-      display: flex;
-      justify-content: flex-end;
-      width: 50%;
-      align-items: center;
-    "
-  >
-    <div
-      [@words]="getFrameTransition(wordsFrames)"
-      id="words"
-      style="display: flex; background-color: red"
-    >
+  <div class="right">
+    <div class="words" [@words]="getFrameTransition(wordsFrames)">
       <div [@cade]="getFrameTransition(cadeFrames)" style="flex-grow: 1">
-        <span
-          style="display: inline-block; overflow: hidden; white-space: nowrap"
-          [@cadeSpan]="getFrameTransition(cadeSpanFrames)"
-          >cade</span
-        >
+        <span [@cadeSpan]="getFrameTransition(cadeSpanFrames)">cade</span>
       </div>
       <div [@w]="getFrameTransition(wFrames)">
-        <span>w</span>
+        <span [@wSpan]="getFrameTransition(wSpanFrames)">w</span>
       </div>
-      <div>
-        <span>.</span>
+      <div
+        [@dot]="getFrameTransition(dotFrames)"
+        style="display: flex; justify-content: flex-end"
+      >
+        <span [@dotSpan]="getFrameTransition(dotSpanFrames)">{{
+          dotTextPhases[frame()]
+        }}</span>
       </div>
       <div>
         <span>dev</span>
@@ -58,10 +42,3 @@
     </div>
   </div>
 </div>
-
-<!-- <nav>
-  <button type="button" (click)="toggle()">Toggle Open/Close</button>
-</nav>
-<div [@openClose]="isOpen ? 'open' : 'closed'" class="open-close-container">
-  <p>The box is now {{ isOpen ? "Open" : "Closed" }}!</p>
-</div> -->

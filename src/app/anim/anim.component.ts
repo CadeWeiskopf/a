@@ -1,12 +1,17 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { trigger } from '@angular/animations';
 import {
   cadeFrames,
   cadeSpanFrames,
+  dotFrames,
+  dotSpanFrames,
+  dotTextPhases,
   generateAnimateCalls,
   lCadeFrames,
+  lWFrames,
   wFrames,
   wordsFrames,
+  wSpanFrames,
 } from './anim.model';
 import { CanvasComponent } from './canvas/canvas.component';
 
@@ -30,10 +35,20 @@ import { CanvasComponent } from './canvas/canvas.component';
       ...generateAnimateCalls(cadeSpanFrames.length),
     ]),
     trigger('w', [...wFrames, ...generateAnimateCalls(wFrames.length)]),
+    trigger('wSpan', [
+      ...wSpanFrames,
+      ...generateAnimateCalls(wSpanFrames.length),
+    ]),
+    trigger('dot', [...dotFrames, ...generateAnimateCalls(dotFrames.length)]),
+    trigger('dotSpan', [
+      ...dotSpanFrames,
+      ...generateAnimateCalls(dotSpanFrames.length),
+    ]),
     trigger('lCade', [
       ...lCadeFrames,
       ...generateAnimateCalls(lCadeFrames.length),
     ]),
+    trigger('lW', [...lWFrames, ...generateAnimateCalls(lWFrames.length)]),
   ],
 })
 export class AnimComponent {
@@ -43,9 +58,24 @@ export class AnimComponent {
   protected readonly cadeFrames = cadeFrames;
   protected readonly cadeSpanFrames = cadeSpanFrames;
   protected readonly wFrames = wFrames;
+  protected readonly wSpanFrames = wSpanFrames;
+  protected readonly dotFrames = dotFrames;
+  protected readonly dotSpanFrames = dotSpanFrames;
   protected readonly lCadeFrames = lCadeFrames;
+  protected readonly lWFrames = lWFrames;
+  protected readonly dotTextPhases = dotTextPhases;
 
   getFrameTransition(states: unknown[]): string {
     return `frame${Math.min(this.frame(), states.length - 1)}`;
+  }
+
+  @HostListener('window:keydown.arrowdown', ['$event'])
+  handleArrowDown(_event: KeyboardEvent) {
+    this.frame.update((f) => f + 1);
+  }
+
+  @HostListener('window:keydown.arrowup', ['$event'])
+  handleArrowUp(_event: KeyboardEvent) {
+    this.frame.update((f) => f - 1);
   }
 }

@@ -36,8 +36,8 @@ export class CanvasComponent {
     },
     to: {
       h: [120, 334],
-      s: 80,
-      l: 70,
+      s: 90,
+      l: 80,
     },
   };
 
