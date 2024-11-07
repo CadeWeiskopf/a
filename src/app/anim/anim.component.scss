@@ -30,9 +30,35 @@
 
 .right > .words:first-child {
   display: flex;
+  position: relative;
 }
 
 .right span {
   display: inline-block;
   overflow: hidden;
+}
+
+.right span {
+  --bg-size: 400%;
+  --color-one: hsl(300, 90%, 55%);
+  --color-two: hsl(253, 95%, 55%);
+  --color-three: hsl(342, 95%, 55%);
+  font-size: clamp(1rem, 5vmin, 3rem);
+  background: linear-gradient(
+      90deg,
+      var(--color-one),
+      var(--color-two),
+      var(--color-one)
+    )
+    0 0 / var(--bg-size) 100%;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: animate-text-gradient 8s infinite linear;
+}
+
+@keyframes animate-text-gradient {
+  to {
+    background-position: var(--bg-size) 0;
+  }
 }

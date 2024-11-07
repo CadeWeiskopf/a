@@ -12,6 +12,9 @@ import {
   wFrames,
   wordsFrames,
   wSpanFrames,
+  fullStackUFrames,
+  devFrames,
+  devTextPhases,
 } from './anim.model';
 import { CanvasComponent } from './canvas/canvas.component';
 
@@ -43,20 +46,35 @@ import { CanvasComponent } from './canvas/canvas.component';
     trigger('dotSpan', [
       ...dotSpanFrames,
       ...generateAnimateCalls(dotSpanFrames.length, {
-        'frame5 => frame6': '500ms linear',
-        'frame6 => frame5': '500ms linear',
-        'frame6 => frame7': '500ms linear',
-        'frame7 => frame6': '500ms linear',
-        'frame7 => frame8': '500ms linear',
-        'frame8 => frame7': '500ms linear',
-        'frame8 => frame9': '500ms linear',
-        'frame9 => frame8': '500ms linear',
-        'frame9 => frame10': '500ms linear',
-        'frame10 => frame9': '500ms linear',
-        'frame10 => frame11': '500ms linear',
-        'frame11 => frame10': '500ms linear',
-        'frame11 => frame12': '500ms linear',
-        'frame12 => frame11': '500ms linear',
+        'frame4 => frame5': '200ms linear',
+        'frame5 => frame4': '200ms linear',
+        'frame5 => frame6': '200ms linear',
+        'frame6 => frame5': '200ms linear',
+        'frame6 => frame7': '200ms linear',
+        'frame7 => frame6': '200ms linear',
+        'frame7 => frame8': '200ms linear',
+        'frame8 => frame7': '200ms linear',
+        'frame8 => frame9': '600ms linear',
+        'frame9 => frame8': '600ms linear',
+      }),
+    ]),
+    trigger('fullStackU', [
+      ...fullStackUFrames,
+      ...generateAnimateCalls(fullStackUFrames.length),
+    ]),
+    trigger('dev', [
+      ...devFrames,
+      ...generateAnimateCalls(devFrames.length, {
+        'frame4 => frame5': '200ms linear',
+        'frame5 => frame4': '200ms linear',
+        'frame5 => frame6': '200ms linear',
+        'frame6 => frame5': '200ms linear',
+        'frame6 => frame7': '200ms linear',
+        'frame7 => frame6': '200ms linear',
+        'frame7 => frame8': '200ms linear',
+        'frame8 => frame7': '200ms linear',
+        'frame8 => frame9': '600ms linear',
+        'frame9 => frame8': '600ms linear',
       }),
     ]),
     trigger('lCade', [
@@ -67,6 +85,12 @@ import { CanvasComponent } from './canvas/canvas.component';
   ],
 })
 export class AnimComponent {
+  slide($event: Event) {
+    this.frame.set(
+      (($event as InputEvent).currentTarget as HTMLInputElement).valueAsNumber
+    );
+    throw new Error('Method not implemented.');
+  }
   protected readonly frame = signal(0);
   protected readonly wordsFrames = wordsFrames;
   protected readonly cadeFrames = cadeFrames;
@@ -75,9 +99,12 @@ export class AnimComponent {
   protected readonly wSpanFrames = wSpanFrames;
   protected readonly dotFrames = dotFrames;
   protected readonly dotSpanFrames = dotSpanFrames;
+  protected readonly fullStackUFrames = fullStackUFrames;
+  protected readonly devFrames = devFrames;
   protected readonly lCadeFrames = lCadeFrames;
   protected readonly lWFrames = lWFrames;
   protected readonly dotTextPhases = dotTextPhases;
+  protected readonly devTextPhases = devTextPhases;
 
   getFrameTransition(states: unknown[]): string {
     return `frame${Math.min(this.frame(), states.length - 1)}`;
@@ -91,5 +118,13 @@ export class AnimComponent {
   @HostListener('window:keydown.arrowup', ['$event'])
   handleArrowUp(_event: KeyboardEvent) {
     this.frame.update((f) => f - 1);
+  }
+
+  min(x: number, y: number) {
+    return Math.min(x, y);
+  }
+
+  max(x: number, y: number) {
+    return Math.max(x, y);
   }
 }

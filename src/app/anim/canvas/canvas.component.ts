@@ -25,17 +25,17 @@ export class CanvasComponent {
   protected readonly showEnd = signal(false);
   startFadeInLetters = false;
   tActive = false;
-  gradientDuration = 8000;
+  gradientDuration = 4000;
   elapsedTime = 0;
   previousTime = 0;
   color = {
     from: {
-      h: [286, 11], // Range of hue
-      s: 75,
-      l: 80,
+      h: [300, 350], // Range of hue
+      s: 90,
+      l: 55,
     },
     to: {
-      h: [120, 334],
+      h: [200, 272],
       s: 90,
       l: 80,
     },
@@ -136,12 +136,21 @@ export class CanvasComponent {
     );
 
     this.ctx.fillStyle = gradient;
+    this.ctx.strokeStyle = gradient;
     this.ctx.fillRect(
       0,
       0,
       document.documentElement.clientWidth / 2,
       document.documentElement.clientHeight
     );
+
+    // this.animateLine(
+    //   document.documentElement.clientWidth / 2,
+    //   document.documentElement.clientHeight / 2,
+    //   document.documentElement.clientWidth,
+    //   document.documentElement.clientHeight / 2,
+    //   1000
+    // );
 
     requestAnimationFrame(() => {
       this.render(this.gradientDuration);

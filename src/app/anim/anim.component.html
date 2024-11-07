@@ -1,6 +1,7 @@
 <div style="position: fixed; top: 0; left: 0">
   <button (click)="frame.set(frame() - 1)">Frame-</button>
   <button (click)="frame.set(frame() + 1)">Frame+</button>
+  <input type="range" min="0" max="10" step="1" (input)="slide($event)" />
   <span>at frame{{ frame() }}</span>
 </div>
 
@@ -21,19 +22,24 @@
       <div [@cade]="getFrameTransition(cadeFrames)" style="flex-grow: 1">
         <span [@cadeSpan]="getFrameTransition(cadeSpanFrames)">cade</span>
       </div>
-      <div [@w]="getFrameTransition(wFrames)">
+      <div [@w]="getFrameTransition(wFrames)" style="max-width: 100%">
         <span [@wSpan]="getFrameTransition(wSpanFrames)">w</span>
       </div>
       <div
         [@dot]="getFrameTransition(dotFrames)"
-        style="display: flex; justify-content: flex-end"
+        style="display: flex; justify-content: flex-end; position: relative"
       >
-        <span [@dotSpan]="getFrameTransition(dotSpanFrames)">{{
-          dotTextPhases[frame()]
-        }}</span>
+        <span
+          [@dotSpan]="getFrameTransition(dotSpanFrames)"
+          style="position: relative; overflow: visible"
+        >
+          {{ dotTextPhases[max(min(frame(), dotTextPhases.length - 1), 0)] }}
+        </span>
       </div>
-      <div>
-        <span>dev</span>
+      <div [@dev]="getFrameTransition(devFrames)" style="position: relative">
+        <span>
+          dev{{ devTextPhases[max(min(frame(), devTextPhases.length - 1), 0)] }}
+        </span>
       </div>
     </div>
   </div>
