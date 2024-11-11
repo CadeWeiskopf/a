@@ -1,29 +1,61 @@
 <div style="position: fixed; top: 0; left: 0">
-  <button (click)="frame.set(frame() - 1)">Frame-</button>
-  <button (click)="frame.set(frame() + 1)">Frame+</button>
-  <input type="range" min="0" max="10" step="1" (input)="slide($event)" />
+  Arrow Up/Down
+  <input
+    type="range"
+    min="0"
+    max="10"
+    step="1"
+    [defaultValue]="0"
+    (input)="slide($event)"
+  />
   <span>at frame{{ frame() }}</span>
 </div>
 
-<app-canvas />
+<app-canvas
+  [minimize]="
+    frame() >= rightFrames.length - 1 &&
+    !(frame() === rightFrames.length - 2 && previousFrame() > frame())
+  "
+  [maximize]="frame() === rightFrames.length - 2 && previousFrame() > frame()"
+/>
 
 <div class="anim-wrapper">
-  <div class="left">
-    <div class="words">
-      <div [@lCade]="getFrameTransition(lCadeFrames)">
-        <span>Cade</span>
+  <div
+    class="left"
+    [style]="
+      frame() >= rightFrames.length - 1
+        ? 'transition: 1s linear; width: 25%;'
+        : frame() === rightFrames.length - 2
+        ? 'transition: 1s linear; width: 50%;'
+        : ''
+    "
+  >
+    <h1 class="words">
+      <div>
+        <span [@lCade]="getFrameTransition(lCadeFrames)">Cade</span>
       </div>
-      <div [@lW]="getFrameTransition(lWFrames)"><span>Weiskopf</span></div>
-    </div>
+      <div>
+        <span [@lW]="getFrameTransition(lWFrames)"> Weiskopf </span>
+      </div>
+    </h1>
   </div>
 
   <div class="right">
-    <div class="words" [@words]="getFrameTransition(wordsFrames)">
-      <div [@cade]="getFrameTransition(cadeFrames)" style="flex-grow: 1">
-        <span [@cadeSpan]="getFrameTransition(cadeSpanFrames)">cade</span>
+    <h2 class="words" [@words]="getFrameTransition(wordsFrames)">
+      <div
+        [@cade]="getFrameTransition(cadeFrames)"
+        style="flex-grow: 1; display: flex; align-items: center"
+      >
+        <span [@cadeSpan]="getFrameTransition(cadeSpanFrames)">
+          <!-- [class]="'trail' + (frame() === 1 ? ' trail-expand' : '')" -->
+          cade
+        </span>
       </div>
       <div [@w]="getFrameTransition(wFrames)" style="max-width: 100%">
-        <span [@wSpan]="getFrameTransition(wSpanFrames)">w</span>
+        <span [@wSpan]="getFrameTransition(wSpanFrames)">
+          <!-- [class]="'trail' + (frame() === 3 ? ' trail-expand' : '')" -->
+          w
+        </span>
       </div>
       <div
         [@dot]="getFrameTransition(dotFrames)"
@@ -37,10 +69,10 @@
         </span>
       </div>
       <div [@dev]="getFrameTransition(devFrames)" style="position: relative">
-        <span>
+        <span [@devSpan]="getFrameTransition(devSpanFrames)">
           dev{{ devTextPhases[max(min(frame(), devTextPhases.length - 1), 0)] }}
         </span>
       </div>
-    </div>
+    </h2>
   </div>
 </div>

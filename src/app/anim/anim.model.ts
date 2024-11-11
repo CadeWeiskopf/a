@@ -21,13 +21,20 @@ export const cadeFrames = generateStates([
 export const lCadeFrames = generateStates([
   style({}),
   style({}),
-  style({ fontSize: '2em' }),
+  style({ fontSize: 'clamp(1.5rem, 8vmin, 6rem)' }),
 ]);
 
 export const cadeSpanFrames = generateStates([
   style({}),
   style({}),
   style({ width: '0%' }),
+]);
+
+export const cadeTrailFrames = generateStates([
+  style({}),
+  style({}),
+  style({}),
+  style({ width: '20px' }),
 ]);
 
 export const wFrames = generateStates([
@@ -51,7 +58,7 @@ export const lWFrames = generateStates([
   style({}),
   style({}),
   style({}),
-  style({ fontSize: '2em' }),
+  style({ fontSize: 'clamp(1.5rem, 8vmin, 6rem)' }),
 ]);
 
 //    transform: translate(-50px, -50px);
@@ -71,24 +78,24 @@ export const dotSpanFrames = generateStates([
   style({ opacity: '0' }),
   style({
     width: 'calc((100% / 8) * 1.875)',
-    transform: 'translateY(calc(-100% * 1.833))',
+    transform: 'translateY(calc(-100% * 0.833)) rotateZ(-36deg)',
   }),
   style({
     width: 'calc((100% / 8) * 2.75)',
-    transform: 'translateY(calc(-100% * 4.5))',
+    transform: 'translateY(calc(-100% * 3.5)) rotateZ(-216deg)',
   }),
   style({
     width: 'calc((100% / 8) * 3.625)',
-    transform: 'translateY(calc(-100% * 5.833))',
+    transform: 'translateY(calc(-100% * 4.833)) rotateZ(-288deg)',
   }),
   style({
     width: 'calc((100% / 8) * 4.5)',
-    transform: 'translateY(calc(-100% * 6))',
+    transform: 'translateY(calc(-100% * 5)) rotate(-360deg)',
   }),
   style({
     width: 'calc((100% / 8) * 8)',
-    transform: 'translateY(calc(-50%))',
-    fontSize: '2em',
+    transform: 'translateY(calc(-50%)) rotate(-360deg)',
+    fontSize: 'clamp(1.5rem, 8vmin, 6rem)',
     textTransform: 'uppercase',
   }),
 ]);
@@ -123,34 +130,81 @@ export const devFrames = generateStates([
     position: 'absolute',
     right: '0px',
     width: 'calc((100% / 8) * 1.875)',
-    transform: 'translateY(calc(100% * 1.833))',
+    transform: 'translateY(calc(100% * 0.833)) rotateZ(36deg)',
   }),
   style({
     position: 'absolute',
     right: '0px',
     width: 'calc((100% / 8) * 2.75)',
-    transform: 'translateY(calc(100% * 4.5))',
+    transform: 'translateY(calc(100% * 3.5)) rotateZ(216deg)',
   }),
   style({
     position: 'absolute',
     right: '0px',
     width: 'calc((100% / 8) * 3.625)',
-    transform: 'translateY(calc(100% * 5.833))',
+    transform: 'translateY(calc(100% * 4.833)) rotateZ(288deg)',
   }),
   style({
     position: 'absolute',
     right: '0px',
     width: 'calc((100% / 8) * 4.5)',
-    transform: 'translateY(calc(100% * 6))',
+    transform: 'translateY(calc(100% * 5)) rotate(360deg)',
   }),
 
   style({
     position: 'absolute',
     right: '0px',
     width: 'calc((100% / 8) * 8)',
-    transform: 'translateY(calc(50%))',
-    fontSize: '2em',
+    transform: 'translateY(calc(50%)) rotate(360deg)',
+    // fontSize: '2em',
     textTransform: 'uppercase',
+  }),
+]);
+
+export const leftFrames = generateStates([
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({
+    width: '25%',
+  }),
+]);
+
+export const rightFrames = generateStates([
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({
+    width: '100%',
+  }),
+]);
+
+export const devSpanFrames = generateStates([
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({
+    fontSize: 'clamp(1.5rem, 8vmin, 6rem)',
   }),
 ]);
 
@@ -179,6 +233,22 @@ export const devTextPhases = [
   'elop',
   'eloper',
 ];
+
+export const canvasFrames = generateStates([
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({}),
+  style({
+    transform: 'translateX(25%)',
+  }),
+]);
 
 function generateStates(styles: AnimationStyleMetadata[]) {
   return styles.map((e, i) => state(`frame${i}`, e));

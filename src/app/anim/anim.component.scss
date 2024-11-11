@@ -7,43 +7,90 @@
   height: 100%;
 }
 
+span {
+  font-size: clamp(1rem, 5vmin, 3rem);
+}
+
 .left {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50%;
   height: 100%;
+  word-break: break-all;
+  text-transform: uppercase;
 }
 
 .left > .words:first-child {
+  all: unset;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
 
+.left span {
+  color: white;
+}
+
 .right {
+  flex-grow: 1;
+  overflow: hidden;
   display: flex;
   justify-content: flex-end;
   width: 50%;
   align-items: center;
+
+  --color-one: hsl(300, 90%, 55%, 0.5);
+  --color-two: hsl(253, 95%, 55%, 0.5);
+  --color-three: hsl(342, 90%, 40%, 0.5);
+  background: radial-gradient(
+      circle at 0% 0%,
+      var(--color-one) -30%,
+      rgba(255, 255, 255, 0) 25%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      var(--color-two) -45%,
+      rgba(255, 255, 255, 0) 50%
+    ),
+    radial-gradient(
+      circle at 15% 100%,
+      var(--color-three) -71%,
+      rgba(255, 255, 255, 0) 50%
+    );
+  background-size: 100% 100%;
+  background-repeat: repeat;
+  background-blend-mode: difference;
+  animation: right-zoom 10s alternate infinite;
+}
+
+@keyframes right-zoom {
+  0% {
+    background-size: 100% 100%;
+  }
+  100% {
+    background-size: 200% 200%;
+  }
 }
 
 .right > .words:first-child {
+  all: unset;
   display: flex;
   position: relative;
 }
 
 .right span {
   display: inline-block;
-  overflow: hidden;
+  // overflow: hidden;
+  height: 100%;
 }
 
 .right span {
   --bg-size: 400%;
   --color-one: hsl(300, 90%, 55%);
   --color-two: hsl(253, 95%, 55%);
-  --color-three: hsl(342, 95%, 55%);
-  font-size: clamp(1rem, 5vmin, 3rem);
+  --color-three: hsl(342, 95%, 40%);
+  --color-four: hsl(195, 95%, 55%);
   background: linear-gradient(
       90deg,
       var(--color-one),
@@ -61,4 +108,36 @@
   to {
     background-position: var(--bg-size) 0;
   }
+}
+
+.trail {
+  position: relative;
+}
+
+.trail::after {
+  --bg-size: 400%;
+  --color-one: hsl(300, 90%, 55%);
+  --color-two: hsl(253, 95%, 55%);
+  --color-three: hsl(342, 90%, 40%);
+  font-size: clamp(1rem, 5vmin, 3rem);
+  background: linear-gradient(
+      90deg,
+      var(--color-one),
+      var(--color-two),
+      var(--color-one)
+    )
+    0 0 / var(--bg-size) 100%;
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -101%;
+  width: 0px;
+  height: 1px;
+  animation: animate-text-gradient 8s infinite linear;
+  transition: 500ms;
+  transform: rotateZ(180deg);
+}
+
+.trail-expand::after {
+  width: 100%;
 }
