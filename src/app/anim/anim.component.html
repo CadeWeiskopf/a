@@ -1,9 +1,9 @@
-<div style="position: fixed; top: 0; left: 0">
+<div style="position: fixed; top: 0; left: 0; z-index: 999">
   Arrow Up/Down
   <input
     type="range"
     min="0"
-    max="10"
+    max="11"
     step="1"
     [defaultValue]="0"
     (input)="slide($event)"
@@ -11,22 +11,24 @@
   <span>at frame{{ frame() }}</span>
 </div>
 
-<app-canvas
-  [minimize]="
-    frame() >= rightFrames.length - 1 &&
-    !(frame() === rightFrames.length - 2 && previousFrame() > frame())
-  "
-  [maximize]="frame() === rightFrames.length - 2 && previousFrame() > frame()"
-/>
+<div>
+  <app-canvas
+    [minimize]="
+      frame() >= rightFrames.length - 1 &&
+      !(frame() === rightFrames.length - 2 && previousFrame() > frame())
+    "
+    [maximize]="frame() === rightFrames.length - 2 && previousFrame() > frame()"
+  />
+</div>
 
 <div class="anim-wrapper">
   <div
     class="left"
     [style]="
       frame() >= rightFrames.length - 1
-        ? 'transition: 1s linear; width: 25%;'
+        ? 'transition: 500ms linear; width: 25%;'
         : frame() === rightFrames.length - 2
-        ? 'transition: 1s linear; width: 50%;'
+        ? 'transition: 500ms linear; width: 50%;'
         : ''
     "
   >
@@ -42,10 +44,7 @@
 
   <div class="right">
     <h2 class="words" [@words]="getFrameTransition(wordsFrames)">
-      <div
-        [@cade]="getFrameTransition(cadeFrames)"
-        style="flex-grow: 1; display: flex; align-items: center"
-      >
+      <div [@cade]="getFrameTransition(cadeFrames)" style="flex-grow: 1">
         <span [@cadeSpan]="getFrameTransition(cadeSpanFrames)">
           <!-- [class]="'trail' + (frame() === 1 ? ' trail-expand' : '')" -->
           cade
@@ -74,5 +73,25 @@
         </span>
       </div>
     </h2>
+    <section class="end-card" [style]="frame() >= 11 ? 'opacity: 1' : ''">
+      <h3 style="all: unset">
+        <span class="extra-line-height">Let's work together</span>
+      </h3>
+      <div style="display: flex; flex-direction: column">
+        <a
+          mat-stroked-button
+          href="/resume.pdf"
+          download
+          [disabled]="frame() < totalFrames"
+          >Download resume</a
+        >
+        <a
+          mat-stroked-button
+          href="https://cadew.dev/contact"
+          [disabled]="frame() < totalFrames"
+          >Contact me</a
+        >
+      </div>
+    </section>
   </div>
 </div>

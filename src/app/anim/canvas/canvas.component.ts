@@ -25,25 +25,11 @@ export class CanvasComponent {
     this.maximize();
     this.#animatingRect = false;
   });
-  // currentAnimComplete = signal(false);
-  // animEffect = effect(() => {
-  //   const x = this.minimize();
-  //   untracked(() => {
-  //     console.log(!this.currentAnimComplete());
-  //     this.currentAnimComplete.set(!this.currentAnimComplete());
-  //   });
-  // });
+  #animatingRect = false;
   protected readonly canvas =
     viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   protected ctx: CanvasRenderingContext2D | undefined | null;
-  #randomLineY = document.documentElement.clientHeight * 0.25;
-  getRandomLineY = () =>
-    document.documentElement.clientHeight *
-    (Math.random() * (0.4 - 0.05) + 0.05);
-
   protected readonly showEnd = signal(false);
-  startFadeInLetters = false;
-  tActive = false;
   gradientDuration = 4000;
   elapsedTime = 0;
   previousTime = 0;
@@ -66,53 +52,24 @@ export class CanvasComponent {
     this.render(this.gradientDuration);
   }
 
-  // animateLine(
-  //   lineStartX: number,
-  //   lineStartY: number,
-  //   lineEndX: number,
-  //   lineEndY: number,
-  //   duration: number
-  // ) {
-  //   const startTime = performance.now();
-  //   const deltaX = lineEndX - lineStartX;
-  //   const deltaY = lineEndY - lineStartY;
-
-  //   const drawFrame = (currentTime: number) => {
-  //     if (!this.ctx) {
-  //       throw new Error('!this.ctx');
-  //     }
-
-  //     const elapsedTime = currentTime - startTime;
-  //     const progress = Math.min(elapsedTime / duration, 1); // Ensure progress does not exceed 1
-
-  //     const currentX = lineStartX + deltaX * progress;
-  //     const currentY = lineStartY + deltaY * progress;
-
-  //     this.ctx.beginPath();
-  //     this.ctx.moveTo(lineStartX, lineStartY);
-  //     this.ctx.lineTo(currentX, currentY);
-  //     this.ctx.stroke();
-
-  //     if (progress < 1) {
-  //       requestAnimationFrame(drawFrame);
-  //     }
-  //   };
-
-  //   requestAnimationFrame(drawFrame);
-  // }
-
   resizeCanvas(): void {
     const canvas = this.canvas()?.nativeElement;
     if (canvas) {
-      canvas.width = window.innerWidth;
-      canvas.height = document.documentElement.clientHeight;
+      canvas.width = Math.min(
+        window.innerWidth,
+        document.documentElement.clientWidth
+      );
+      canvas.height = Math.max(
+        window.innerHeight,
+        document.documentElement.clientHeight
+      );
     }
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(): void {
+    // alert('resized');
     this.resizeCanvas();
-    console.log('resize');
   }
 
   toCssColor(color: HslColor, progress: number) {
@@ -138,22 +95,11 @@ export class CanvasComponent {
     const isForward = Math.floor(this.elapsedTime / duration) % 2 === 0;
     const progress = isForward ? rawProgress : 1 - rawProgress;
 
-    // const gradient = this.ctx.createLinearGradient(
-    //   document.documentElement.clientWidth,
-    //   0,
-    //   0,
-    //   document.documentElement.clientHeight
-    // );
-
     const rotationSpeed = 0.001;
     const rotationAngle = rotationSpeed * this.elapsedTime;
-    const centerX = document.documentElement.clientWidth / 2;
-    const centerY = document.documentElement.clientHeight / 2;
-    const radius =
-      Math.min(
-        document.documentElement.clientWidth,
-        document.documentElement.clientHeight
-      ) / 2;
+    const centerX = this.ctx.canvas.width / 2;
+    const centerY = this.ctx.canvas.height / 2;
+    const radius = Math.min(this.ctx.canvas.width, this.ctx.canvas.height) / 2;
 
     const startX = centerX + radius * Math.cos(rotationAngle);
     const startY = centerY + radius * Math.sin(rotationAngle);
@@ -175,21 +121,23 @@ export class CanvasComponent {
     this.ctx.strokeStyle = gradient;
 
     if (this.minimize() && !this.#animatingRect) {
-      this.animateRect(
-        document.documentElement.clientWidth / 2,
-        document.documentElement.clientWidth / 4
-      );
+      this.animateRect(this.ctx.canvas.width / 2, this.ctx.canvas.width / 4);
     } else if (this.maximize() && !this.#animatingRect) {
-      this.animateRect(
-        document.documentElement.clientWidth / 4,
-        document.documentElement.clientWidth / 2
-      );
+      this.animateRect(this.ctx.canvas.width / 4, this.ctx.canvas.width / 2);
     } else if (!this.maximize()) {
+      if (!this.#animatingRect) {
+        this.ctx?.clearRect(
+          0,
+          0,
+          this.ctx.canvas.width,
+          this.ctx.canvas.height
+        );
+      }
       this.ctx.fillRect(
         0,
         0,
-        document.documentElement.clientWidth / (this.minimize() ? 4 : 2),
-        document.documentElement.clientHeight
+        this.ctx.canvas.width / (this.minimize() ? 4 : 2),
+        this.ctx.canvas.height
       );
     }
 
@@ -198,11 +146,10 @@ export class CanvasComponent {
     });
   }
 
-  #animatingRect = false;
   animateRect(startWidth: number, targetWidth: number) {
     this.#animatingRect = true;
     const height = document.documentElement.clientHeight;
-    const duration = 1000;
+    const duration = 500;
     let startTime: number | null = null;
 
     const animateRectInterp = (timestamp: number) => {
@@ -213,17 +160,11 @@ export class CanvasComponent {
       const currentWidth =
         startWidth + (targetWidth - startWidth) * Math.min(progress, 1);
 
-      this.ctx!.clearRect(
-        0,
-        0,
-        document.documentElement.clientWidth,
-        document.documentElement.clientHeight
-      );
-      this.ctx!.fillRect(0, 0, currentWidth, height);
+      this.ctx?.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+      this.ctx?.fillRect(0, 0, currentWidth, height);
 
       if (progress < 1) {
         requestAnimationFrame(animateRectInterp);
-      } else {
       }
     };
 

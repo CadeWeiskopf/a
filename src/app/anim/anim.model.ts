@@ -21,7 +21,10 @@ export const cadeFrames = generateStates([
 export const lCadeFrames = generateStates([
   style({}),
   style({}),
-  style({ fontSize: 'clamp(1.5rem, 8vmin, 6rem)' }),
+  style({
+    fontSize: 'clamp(1.5rem, 8vmin, 6rem)',
+    lineHeight: 'clamp(1.5rem, 8vmin, 6rem)',
+  }),
 ]);
 
 export const cadeSpanFrames = generateStates([
@@ -58,7 +61,10 @@ export const lWFrames = generateStates([
   style({}),
   style({}),
   style({}),
-  style({ fontSize: 'clamp(1.5rem, 8vmin, 6rem)' }),
+  style({
+    fontSize: 'clamp(1.5rem, 8vmin, 6rem)',
+    lineHeight: 'clamp(1.5rem, 8vmin, 6rem)',
+  }),
 ]);
 
 //    transform: translate(-50px, -50px);
@@ -96,24 +102,9 @@ export const dotSpanFrames = generateStates([
     width: 'calc((100% / 8) * 8)',
     transform: 'translateY(calc(-50%)) rotate(-360deg)',
     fontSize: 'clamp(1.5rem, 8vmin, 6rem)',
+    lineHeight: 'clamp(1.5rem, 8vmin, 6rem)',
     textTransform: 'uppercase',
-  }),
-]);
-
-export const fullStackUFrames = generateStates([
-  style({}),
-  style({}),
-  style({}),
-  style({}),
-  style({
-    // opacity: '0',
-    // width: '0px',
-  }),
-  style({
-    // width: 'auto',
-    // opacity: '1',
-    // width: 'calc((100% / 8) * 1)',
-    // transform: 'translateY(calc(-100% * 2))',
+    padding: '0 0.2rem',
   }),
 ]);
 
@@ -205,6 +196,8 @@ export const devSpanFrames = generateStates([
   style({}),
   style({
     fontSize: 'clamp(1.5rem, 8vmin, 6rem)',
+    lineHeight: 'clamp(1.5rem, 8vmin, 6rem)',
+    padding: '0 0.2rem',
   }),
 ]);
 

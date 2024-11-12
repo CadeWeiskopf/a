@@ -1,14 +1,24 @@
 :host {
-  font-family: "Rubik Mono One";
+  // font-family: "Rubik Mono One";
 }
 
 .anim-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   height: 100%;
 }
 
 span {
   font-size: clamp(1rem, 5vmin, 3rem);
+  line-height: clamp(1rem, 5vmin, 3rem);
+}
+
+.extra-line-height {
+  line-height: calc(clamp(1rem, 5vmin, 3rem) + 1em);
 }
 
 .left {
@@ -28,13 +38,18 @@ span {
   flex-wrap: wrap;
 }
 
+.left > .words:first-child > * {
+  padding: 0 0.2rem;
+}
+
 .left span {
   color: white;
 }
 
 .right {
-  flex-grow: 1;
   overflow: hidden;
+  position: relative;
+  flex-grow: 1;
   display: flex;
   justify-content: flex-end;
   width: 50%;
@@ -79,13 +94,19 @@ span {
   position: relative;
 }
 
+.right > .words:first-child > * {
+  display: flex;
+  align-items: center;
+}
+
 .right span {
   display: inline-block;
   // overflow: hidden;
   height: 100%;
 }
 
-.right span {
+.right span,
+::ng-deep .right a:hover span {
   --bg-size: 400%;
   --color-one: hsl(300, 90%, 55%);
   --color-two: hsl(253, 95%, 55%);
@@ -110,34 +131,13 @@ span {
   }
 }
 
-.trail {
-  position: relative;
-}
-
-.trail::after {
-  --bg-size: 400%;
-  --color-one: hsl(300, 90%, 55%);
-  --color-two: hsl(253, 95%, 55%);
-  --color-three: hsl(342, 90%, 40%);
-  font-size: clamp(1rem, 5vmin, 3rem);
-  background: linear-gradient(
-      90deg,
-      var(--color-one),
-      var(--color-two),
-      var(--color-one)
-    )
-    0 0 / var(--bg-size) 100%;
-  content: "";
+.end-card {
   position: absolute;
-  top: 50%;
-  right: -101%;
-  width: 0px;
-  height: 1px;
-  animation: animate-text-gradient 8s infinite linear;
-  transition: 500ms;
-  transform: rotateZ(180deg);
-}
-
-.trail-expand::after {
-  width: 100%;
+  top: calc(50% + clamp(1.5rem, 8vmin, 6rem));
+  left: 0.2rem;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  transition: 2s;
+  opacity: 0;
 }

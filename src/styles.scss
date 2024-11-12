@@ -1,7 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
 @font-face {
-  font-family: "roboto mono";
-  src: url("./assets/RobotoMono-VariableFont_wght.ttf") format("truetype");
+  font-family: "rubik mono";
   src: url("./assets/RubikMonoOne-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
@@ -9,6 +7,6 @@
 
 body {
   margin: 0;
-  height: 100dvh;
-  overflow: hidden;
+  height: 100vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }

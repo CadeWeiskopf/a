@@ -1,5 +1,7 @@
-import { Component, computed, HostListener, signal } from '@angular/core';
+import { AfterViewInit, Component, HostListener, signal } from '@angular/core';
 import { trigger } from '@angular/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import {
   cadeFrames,
   cadeSpanFrames,
@@ -12,7 +14,6 @@ import {
   wFrames,
   wordsFrames,
   wSpanFrames,
-  fullStackUFrames,
   devFrames,
   devTextPhases,
   cadeTrailFrames,
@@ -26,7 +27,7 @@ import { CanvasComponent } from './canvas/canvas.component';
 @Component({
   selector: 'app-anim',
   standalone: true,
-  imports: [CanvasComponent],
+  imports: [CanvasComponent, MatCardModule, MatButtonModule],
   templateUrl: './anim.component.html',
   styleUrl: './anim.component.scss',
   animations: [
@@ -62,10 +63,6 @@ import { CanvasComponent } from './canvas/canvas.component';
         'frame8 => frame9': '400ms ease-out',
         'frame9 => frame8': '400ms ease-out',
       }),
-    ]),
-    trigger('fullStackU', [
-      ...fullStackUFrames,
-      ...generateAnimateCalls(fullStackUFrames.length),
     ]),
     trigger('dev', [
       ...devFrames,
@@ -114,7 +111,7 @@ import { CanvasComponent } from './canvas/canvas.component';
     ]),
   ],
 })
-export class AnimComponent {
+export class AnimComponent implements AfterViewInit {
   protected readonly frame = signal(0);
   protected readonly previousFrame = signal(0);
   updateFrame = (f: number) => {
@@ -129,7 +126,6 @@ export class AnimComponent {
   protected readonly wSpanFrames = wSpanFrames;
   protected readonly dotFrames = dotFrames;
   protected readonly dotSpanFrames = dotSpanFrames;
-  protected readonly fullStackUFrames = fullStackUFrames;
   protected readonly devFrames = devFrames;
   protected readonly rightFrames = rightFrames;
   protected readonly leftFrames = leftFrames;
@@ -139,21 +135,48 @@ export class AnimComponent {
   protected readonly devTextPhases = devTextPhases;
   protected readonly devSpanFrames = devSpanFrames;
   protected readonly canvasFrames = canvasFrames;
+  totalFrames = 11;
+  #frameScrollInterval = 0;
+
+  ngAfterViewInit(): void {
+    this.#frameScrollInterval =
+      (document.documentElement.scrollHeight - window.innerHeight) /
+      this.totalFrames;
+  }
 
   getFrameTransition(states: unknown[]): string {
     return `frame${Math.min(this.frame(), states.length - 1)}`;
   }
 
   @HostListener('window:keydown.arrowdown', ['$event'])
-  handleArrowDown(_event: KeyboardEvent) {
-    // this.frame.update((f) => f + 1);
-    this.updateFrame(this.frame() + 1);
+  handleArrowDown(event: KeyboardEvent) {
+    event.preventDefault();
+    const newFrame = this.frame() + 1;
+    this.updateFrame(
+      newFrame <= this.totalFrames ? newFrame : this.totalFrames
+    );
   }
 
   @HostListener('window:keydown.arrowup', ['$event'])
-  handleArrowUp(_event: KeyboardEvent) {
-    this.updateFrame(this.frame() - 1);
-    // this.frame.update((f) => f - 1);
+  handleArrowUp(event: KeyboardEvent) {
+    event.preventDefault();
+    const newFrame = this.frame() - 1;
+    this.updateFrame(newFrame < 0 ? 0 : newFrame);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    this.#frameScrollInterval =
+      (document.documentElement.scrollHeight - window.innerHeight) /
+      this.totalFrames;
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(): void {
+    const scrolledToFrame = Math.floor(
+      window.scrollY / this.#frameScrollInterval
+    );
+    this.updateFrame(scrolledToFrame);
   }
 
   slide($event: Event) {
