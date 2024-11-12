@@ -1,7 +1,15 @@
-import { AfterViewInit, Component, HostListener, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  HostListener,
+  inject,
+  signal,
+} from '@angular/core';
 import { trigger } from '@angular/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   cadeFrames,
   cadeSpanFrames,
@@ -118,6 +126,16 @@ export class AnimComponent implements AfterViewInit {
     this.previousFrame.set(this.frame());
     this.frame.set(f);
   };
+  promptSnackBar = effect(() => {
+    const currentFrame = this.frame();
+    if (currentFrame >= 3 && !this.#hasScrolled) {
+      this.#hasScrolled = true;
+      this.#snackBar.dismiss();
+    } else if (currentFrame <= 0) {
+      this.#hasScrolled = false;
+      this.openScrollDialog();
+    }
+  });
   protected readonly wordsFrames = wordsFrames;
   protected readonly cadeFrames = cadeFrames;
   protected readonly cadeSpanFrames = cadeSpanFrames;
@@ -137,11 +155,33 @@ export class AnimComponent implements AfterViewInit {
   protected readonly canvasFrames = canvasFrames;
   totalFrames = 11;
   #frameScrollInterval = 0;
+  #hasScrolled = false;
+  #isSnackBarOpen = false;
+  #snackBar = inject(MatSnackBar);
 
   ngAfterViewInit(): void {
     this.#frameScrollInterval =
       (document.documentElement.scrollHeight - window.innerHeight) /
       this.totalFrames;
+
+    this.openScrollDialog();
+  }
+
+  openScrollDialog() {
+    if (this.#isSnackBarOpen) {
+      return;
+    }
+    this.#isSnackBarOpen = true;
+    this.#snackBar
+      .open('scroll to the end', 'or click to skip')
+      .afterDismissed()
+      .subscribe((e) => {
+        this.#isSnackBarOpen = false;
+        if (!e.dismissedByAction) {
+          return;
+        }
+        window.scrollTo(0, document.documentElement.scrollHeight);
+      });
   }
 
   getFrameTransition(states: unknown[]): string {
