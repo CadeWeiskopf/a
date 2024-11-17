@@ -1,3 +1,16 @@
+<div class="frame-label">
+  <button (click)="skip()">skip</button>
+  <button (click)="updateFrame(frame() + 1)" class="no-after-button">
+    <mat-icon>arrow_downward</mat-icon>
+  </button>
+  <button (click)="updateFrame(frame() - 1)">
+    <mat-icon>arrow_upward</mat-icon>
+  </button>
+  <span style="width: 3em">
+    {{ frame().toString().padStart(2, "0") }}/{{ totalFrames }}
+  </span>
+</div>
+
 <div>
   <app-canvas
     [minimize]="
@@ -19,7 +32,7 @@
         : ''
     "
   >
-    <h1 class="words">
+    <h1 [class]="'words ' + (frame() >= 10 ? 'left-span-margin-mobile' : '')">
       <div>
         <span [@lCade]="getFrameTransition(lCadeFrames)">Cade</span>
       </div>
@@ -67,7 +80,7 @@
       <div style="display: flex; flex-direction: column">
         <a
           mat-stroked-button
-          href="/resume.pdf"
+          href="/WeiskopfCade-Resume.pdf"
           download
           [disabled]="frame() < totalFrames"
           >Download resume</a

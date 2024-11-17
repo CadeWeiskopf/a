@@ -1,12 +1,10 @@
 import {
   Component,
-  computed,
   effect,
   ElementRef,
   HostListener,
   input,
   signal,
-  untracked,
   viewChild,
 } from '@angular/core';
 
@@ -35,7 +33,7 @@ export class CanvasComponent {
   previousTime = 0;
   color = {
     from: {
-      h: [300, 350], // Range of hue
+      h: [300, 350],
       s: 90,
       l: 55,
     },
@@ -172,8 +170,11 @@ export class CanvasComponent {
   }
 }
 
+/**
+ * @prop h -- hue range
+ */
 type HslColor = {
-  h: [number, number]; // hue range
+  h: [number, number];
   s: number;
   l: number;
 };

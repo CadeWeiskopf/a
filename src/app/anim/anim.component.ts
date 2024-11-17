@@ -1,15 +1,8 @@
-import {
-  AfterViewInit,
-  Component,
-  effect,
-  HostListener,
-  inject,
-  signal,
-} from '@angular/core';
+import { AfterViewInit, Component, HostListener, signal } from '@angular/core';
 import { trigger } from '@angular/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import {
   cadeFrames,
   cadeSpanFrames,
@@ -35,7 +28,7 @@ import { CanvasComponent } from './canvas/canvas.component';
 @Component({
   selector: 'app-anim',
   standalone: true,
-  imports: [CanvasComponent, MatCardModule, MatButtonModule],
+  imports: [CanvasComponent, MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './anim.component.html',
   styleUrl: './anim.component.scss',
   animations: [
@@ -123,19 +116,14 @@ export class AnimComponent implements AfterViewInit {
   protected readonly frame = signal(0);
   protected readonly previousFrame = signal(0);
   updateFrame = (f: number) => {
+    if (f < 0) {
+      f = 0;
+    } else if (f > this.totalFrames) {
+      f = this.totalFrames;
+    }
     this.previousFrame.set(this.frame());
     this.frame.set(f);
   };
-  promptSnackBar = effect(() => {
-    const currentFrame = this.frame();
-    if (currentFrame >= 3 && !this.#hasScrolled) {
-      this.#hasScrolled = true;
-      this.#snackBar.dismiss();
-    } else if (currentFrame <= 0) {
-      this.#hasScrolled = false;
-      this.openScrollDialog();
-    }
-  });
   protected readonly wordsFrames = wordsFrames;
   protected readonly cadeFrames = cadeFrames;
   protected readonly cadeSpanFrames = cadeSpanFrames;
@@ -155,33 +143,11 @@ export class AnimComponent implements AfterViewInit {
   protected readonly canvasFrames = canvasFrames;
   totalFrames = 11;
   #frameScrollInterval = 0;
-  #hasScrolled = false;
-  #isSnackBarOpen = false;
-  #snackBar = inject(MatSnackBar);
 
   ngAfterViewInit(): void {
     this.#frameScrollInterval =
       (document.documentElement.scrollHeight - window.innerHeight) /
       this.totalFrames;
-
-    this.openScrollDialog();
-  }
-
-  openScrollDialog() {
-    if (this.#isSnackBarOpen) {
-      return;
-    }
-    this.#isSnackBarOpen = true;
-    this.#snackBar
-      .open('scroll to the end', 'or click to skip')
-      .afterDismissed()
-      .subscribe((e) => {
-        this.#isSnackBarOpen = false;
-        if (!e.dismissedByAction) {
-          return;
-        }
-        window.scrollTo(0, document.documentElement.scrollHeight);
-      });
   }
 
   getFrameTransition(states: unknown[]): string {
@@ -191,19 +157,16 @@ export class AnimComponent implements AfterViewInit {
   @HostListener('window:keydown.arrowdown', ['$event'])
   handleArrowDown(event: KeyboardEvent) {
     event.preventDefault();
-    const newFrame = this.frame() + 1;
-    this.updateFrame(
-      newFrame <= this.totalFrames ? newFrame : this.totalFrames
-    );
+    this.updateFrame(this.frame() + 1);
+    window.scrollTo(0, this.#frameScrollInterval * this.frame() + 1);
   }
 
   @HostListener('window:keydown.arrowup', ['$event'])
   handleArrowUp(event: KeyboardEvent) {
     event.preventDefault();
-    const newFrame = this.frame() - 1;
-    this.updateFrame(newFrame < 0 ? 0 : newFrame);
+    this.updateFrame(this.frame() - 1);
+    window.scrollTo(0, this.#frameScrollInterval * this.frame() + 1);
   }
-
   @HostListener('window:resize', ['$event'])
   onResize(): void {
     this.#frameScrollInterval =
@@ -231,5 +194,9 @@ export class AnimComponent implements AfterViewInit {
 
   max(x: number, y: number) {
     return Math.max(x, y);
+  }
+
+  skip(): void {
+    window.scrollTo(0, document.documentElement.scrollHeight);
   }
 }

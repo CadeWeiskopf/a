@@ -1,7 +1,3 @@
-:host {
-  // font-family: "Rubik Mono One";
-}
-
 .anim-wrapper {
   position: fixed;
   top: 0;
@@ -19,6 +15,12 @@ span {
 
 .extra-line-height {
   line-height: calc(clamp(1rem, 5vmin, 3rem) + 1em);
+}
+
+@media (max-width: 1150px) {
+  .left-span-margin-mobile {
+    margin-bottom: clamp(1.5rem, 8vmin, 6rem) !important;
+  }
 }
 
 .left {
@@ -105,8 +107,36 @@ span {
   height: 100%;
 }
 
+.frame-label {
+  position: fixed;
+  // right: calc(50% - 85px);
+  right: 6.4px;
+  font-family: pixelify sans;
+  // top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  z-index: 1;
+  font-size: 12px;
+  // width: 135px;
+  transition: 500ms;
+}
+
+.frame-label > button {
+  all: unset;
+  position: relative; /* Make the button a reference for the pseudo-element */
+}
+
+.frame-label span {
+  font-size: 12px;
+}
+
 .right span,
-::ng-deep .right a:hover span {
+::ng-deep .right a:hover span,
+::ng-deep .right a:focus span,
+.frame-label,
+.frame-label button {
   --bg-size: 400%;
   --color-one: hsl(300, 90%, 55%);
   --color-two: hsl(253, 95%, 55%);
